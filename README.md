@@ -12,6 +12,7 @@
     venv\Scripts\activate          # Windows
 3. Установить зависимости:
     ```
+    cd .\cashflow_app\
     pip install -r requirements.txt
 4. Применить миграции и загрузить данные в базу:
     ```
