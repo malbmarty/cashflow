@@ -1,0 +1,69 @@
+{% extends 'finance/base.html' %}
+
+{% block title %}Редактирование записи - Управление транзакциями{% endblock %}
+
+{% block content %}
+{% load static %}
+<h1>Редактирование записи</h1>
+
+<form id="transactionForm" data-success-url="{% url 'home' %}">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label>Дата:</label>
+        <input type="date" name="date" value="{{ date }}" required>
+    </div>
+
+    <div class="form-group">
+        <label>Статус:</label>
+        <select name="status" required>
+            {% for status in statuses %}
+            <option value="{{ status.id }}" {% if status.id == transaction.status %}selected{% endif %}>
+                {{ status.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+
+    <div class="form-group">
+        <label>Тип операции:</label>
+        <select name="transaction_type" id="transactionType" required 
+                onchange="loadCategories()">
+            <option value="">Выберите тип</option>
+            {% for type in types %}
+            <option value="{{ type.id }}" {% if type.id == transaction.transaction_type %}selected{% endif %}>
+                {{ type.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Категория:</label>
+        <select name="category" id="category" required 
+                onchange="loadSubcategories()" data-selected-category="{{ transaction.category }}">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Подкатегория:</label>
+        <select name="subcategory" id="subcategory" data-selected-subcategory="{{ transaction.subcategory }}" required>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Сумма:</label>
+        <input type="number" name="amount" step="0.01" value="{{ transaction.amount }}" required>
+    </div>
+
+    <div class="form-group">
+        <label>Комментарий:</label>
+        <textarea name="comment" rows="3">{{ transaction.comment }}</textarea>
+    </div>
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+
+<script src="{% static 'js/edit_transaction.js' %}"></script>
+{% endblock %}

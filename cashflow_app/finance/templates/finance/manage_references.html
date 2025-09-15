@@ -1,0 +1,131 @@
+{% extends 'finance/base.html' %}
+{% load static %}
+
+{% block title %}Управление справочниками - Управление транзакциями{% endblock %}
+
+{% block extra_head %}
+<script src="{% static 'js/manage_references.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>Управление справочниками</h1>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+    
+    <!-- Статусы -->
+    <div>
+        <h3>Статусы</h3>
+        <form id="statusForm">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="statusId">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Название статуса" required>
+            </div>
+            <button type="submit">Сохранить</button>
+            <button type="button" onclick="clearForm('statusForm')">Отмена</button>
+        </form>
+        <ul id="statusList">
+            {% for status in statuses %}
+            <li>
+                {{ status.name }}
+                <button class="icon-btn" onclick="editItem('status', '{{ status.id }}', '{{ status.name }}')">✏️</button>
+                <button class="icon-btn" onclick="deleteItem('statuses', '{{ status.id }}')">❌</button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Типы операций -->
+    <div>
+        <h3>Типы операций</h3>
+        <form id="typeForm">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="typeId">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Название типа" required>
+            </div>
+            <button type="submit">Сохранить</button>
+            <button type="button" onclick="clearForm('typeForm')">Отмена</button>
+        </form>
+        <ul id="typeList">
+            {% for type in types %}
+            <li>
+                {{ type.name }}
+                <button class="icon-btn" onclick="editItem('type', '{{ type.id }}', '{{ type.name }}')">✏️</button>
+                <button class="icon-btn" onclick="deleteItem('types', '{{ type.id }}')">❌</button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Категории -->
+    <div>
+        <h3>Категории</h3>
+        <form id="categoryForm">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="categoryId">
+            <div class="form-group">
+                <select name="transaction_type" id="categoryType" required>
+                    <option value="">Выберите тип</option>
+                    {% for type in types %}
+                    <option value="{{ type.id }}">{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Название категории" required>
+            </div>
+            <button type="submit">Сохранить</button>
+            <button type="button" onclick="clearForm('categoryForm')">Отмена</button>
+        </form>
+        <ul id="categoryList">
+            {% for category in categories %}
+            <li>
+                [{{ category.transaction_type.name }}] {{ category.name }}
+                <button class="icon-btn" onclick="editCategory('{{ category.id }}', '{{ category.name }}', '{{ category.transaction_type.id }}')">✏️</button>
+                <button class="icon-btn" onclick="deleteItem('categories', '{{ category.id }}')">❌</button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Подкатегории -->
+    <div>
+        <h3>Подкатегории</h3>
+        <form id="subcategoryForm">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="subcategoryId">
+            <div class="form-group">
+                <select name="category" id="subcategoryCategory" required onchange="updateSubcategoryType()">
+                    <option value="">Выберите категорию</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" data-type="{{ category.transaction_type.id }}">
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Название подкатегории" required>
+            </div>
+            <div class="form-group">
+                <label>Тип операции:</label>
+                <span id="subcategoryTypeDisplay">—</span>
+            </div>
+            <button type="submit">Сохранить</button>
+            <button type="button" onclick="clearForm('subcategoryForm')">Отмена</button>
+        </form>
+        <ul id="subcategoryList">
+            {% for subcategory in subcategories %}
+            <li>
+                [{{ subcategory.category.transaction_type.name }} → {{ subcategory.category.name }}] {{ subcategory.name }}
+                <button class="icon-btn" onclick="editSubcategory('{{ subcategory.id }}', '{{ subcategory.name }}', '{{ subcategory.category.id }}')">✏️</button>
+                <button class="icon-btn" onclick="deleteItem('subcategories', '{{ subcategory.id }}')">❌</button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+<script src="{% static 'js/manage_references.js' %}"></script>
+{% endblock %}
