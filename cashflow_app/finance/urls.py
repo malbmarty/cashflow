@@ -12,7 +12,7 @@ router.register(r'transactions', views.TransactionViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('home/', views.HomePageView.as_view(), name='home'),
+    path('', views.HomePageView.as_view(), name='home'),
     path('create/', views.CreateTransactionView.as_view(), name='create'),
     path('edit/<int:pk>/', views.EditTransactionView.as_view(), name='edit'),
     path('manage/', views.ManageReferencesView.as_view(), name='manage'),
