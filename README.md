@@ -16,7 +16,7 @@
 4. Применить миграции и загрузить данные в базу:
     ```
     python manage.py migrate
-    python manage.py loaddata initial_data.json
+    python -Xutf8 manage.py loaddata initial_data.json
 5. Запустить сервер:
     ```
     python manage.py runserver
