@@ -57,6 +57,9 @@
 Создание записи:
 ![alt text](interface/image-10.png)
 
+Редактирование записи: 
+![alt text](interface/image-13.png)
+
 Управление справочниками: 
 ![alt text](interface/image-11.png)
 (продолжение)
